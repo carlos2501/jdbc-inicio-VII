@@ -18,4 +18,9 @@ public class Oficina {
     private String telefono;
     private String lineaDireccion1;
     private String lineaDireccion2;
+
+    public String toString(){
+        return "Oficina [" + codigoOficina + ", " + ciudad + ", " + pais + ", " + region + ", " +
+                codigoPostal + ", " + telefono + ", " + lineaDireccion1 + ", " + lineaDireccion2 + "]";
+    }
 }

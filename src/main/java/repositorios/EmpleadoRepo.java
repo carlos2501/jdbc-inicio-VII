@@ -35,10 +35,12 @@ public class EmpleadoRepo {
     }
 
     public List<Empleado> listarEmpleados() {
+        // Creamos la variable que conterndrá los datos de los empleados
         List<Empleado> empleados = new ArrayList<>();
-
+        // ejecutamos la consulta dentro de un try con recursos para asegurarnos el cierre de estos
         try(Statement stmt = obtenerSentencia();
             ResultSet rs = stmt.executeQuery(LISTAR_EMPLEADOS)) {
+            // Recorremos el resulset para asignar cada registro a un empleado
             while (rs.next()) {
                 Empleado empleado = new Empleado();
                 empleado.setCodigoEmpleado(rs.getInt("codigo_empleado"));
