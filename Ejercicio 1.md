@@ -1,7 +1,8 @@
 ## Ejercicio 1.
 * Programar una aplicación de consola que realice las operaciones CRUD sobre oficina.
 * Debe presentar mensajes si no se puede realizar la acción, o la entidad no existe.
-* Para operaciones de lectura se utilizará la PK de la entidad.
+* Para operaciones de lectura se utilizará la PK de la entidad. Habrá que comprobar que el valor introducido por el 
+usuario es del tipo correcto.
 * El usuario podrá:
   * Obtener una lista de entidades. (R)
   * Obtener una entidad por su Id. (R)
