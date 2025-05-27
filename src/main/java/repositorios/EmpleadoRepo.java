@@ -7,6 +7,7 @@ import util.ConexionBD;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Est clase representa un repositorio para gestionar todas las operaciones con la BBDD que se realicen con la
@@ -42,8 +43,8 @@ public class EmpleadoRepo {
         return empleados;
     }
 
-    public Empleado leerEmpleado(Integer id) throws SQLException {
-        Empleado empleado = new Empleado();
+    public Optional<Empleado> leerEmpleado(Integer id) throws SQLException {
+        Empleado empleado = null;
         String sql = "SELECT * FROM empleado WHERE codigo_empleado = ?";
         try(PreparedStatement stmt = obtenerConexion().prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -51,7 +52,7 @@ public class EmpleadoRepo {
             if(rs.next()) {
                 empleado = cargarEmpleado(rs);
             }
-            return empleado;
+            return Optional.ofNullable(empleado);
         }
     }
 
