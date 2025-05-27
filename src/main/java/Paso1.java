@@ -22,5 +22,8 @@ public class Paso1 {
         for (Oficina oficina : listaOfis) {
             System.out.println(oficina.toString());
         }
+        System.out.println("------------ leer un empleado por su id (5) ----------------");
+        Empleado emp = repoEmpl.leerEmpleado(5);
+        System.out.println(emp.toString());
     }
 }
