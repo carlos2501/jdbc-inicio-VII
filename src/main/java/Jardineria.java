@@ -90,7 +90,6 @@ public class Jardineria {
                     }
                     break;
                 }
-
                 /*case "5" -> .delete();*/
                 case "6": {
                     run = false;
@@ -141,6 +140,8 @@ public class Jardineria {
     }
 
     private static void leerYModificarCampos(Scanner scanner, Oficina oficina, OficinaRepo repo) throws IllegalAccessException, SQLException {
+        boolean seguir = true;
+        boolean otravez = false;
         // Obtenemos los campos de la oficina
         Field[] listaCampos = oficina.getClass().getDeclaredFields();
         // Generamos una lista con el nombre del campo y su valor mediante reflexión
@@ -149,43 +150,45 @@ public class Jardineria {
             field.setAccessible(true);
             System.out.println("Campo " + (i+1) + ": " + field.getName() + " - valor: " + field.get(oficina));
         }
-        // Preguntamos el campo que se desea modificar
-        System.out.println("Indique el numero del campo que desea modificar (si desea salir, indique cualquier otro número):");
-        int campo = scanner.nextInt();
-        // Si el campo es mayor que la última opción, salimos del método
-        if(campo > listaCampos.length) {
-           return;
-        }
-        // Preguntamos el nuevo valor
-        scanner.nextLine();
-        System.out.println("Que valor le desea dar al campo?");
-        String valor = scanner.nextLine();
-        switch(campo){
-            case 1:
-                System.out.println("El código de la oficina no se puede modificar");
-                break;
-            case 2:
-                oficina.setCiudad(valor.isEmpty() ? oficina.getCiudad() : valor);
-                break;
-            case 3:
-                oficina.setPais(valor.isEmpty() ? oficina.getPais() : valor);
-                break;
-            case 4:
-                oficina.setRegion(valor.isEmpty() ? oficina.getRegion() : valor);
-                break;
-            case 5:
-                oficina.setCodigoPostal(valor.isEmpty() ? oficina.getCodigoPostal() : valor);
-                break;
-            case 6:
-                oficina.setTelefono(valor.isEmpty() ? oficina.getTelefono() : valor);
-                break;
-            case 7:
-                oficina.setLineaDireccion1(valor.isEmpty() ? oficina.getLineaDireccion1() : valor);
-                break;
-            case 8:
-                oficina.setLineaDireccion2(valor.isEmpty() ? oficina.getLineaDireccion2() : valor);
-            default:
-                break;
+        while (seguir) {
+            // Preguntamos el campo que se desea modificar
+            System.out.println("Indique el numero del campo que desea modificar (si desea salir, indique cualquier otro número):");
+            int campo = scanner.nextInt();
+            // Si el campo es mayor que la última opción, salimos del método
+            if(campo > listaCampos.length) {
+                seguir = false;
+            }
+            // Preguntamos el nuevo valor
+            scanner.nextLine();
+            System.out.println("Que valor le desea dar al campo?");
+            String valor = scanner.nextLine();
+            switch (campo) {
+                case 1:
+                    System.out.println("El código de la oficina no se puede modificar");
+                    break;
+                case 2:
+                    oficina.setCiudad(valor.isEmpty() ? oficina.getCiudad() : valor);
+                    break;
+                case 3:
+                    oficina.setPais(valor.isEmpty() ? oficina.getPais() : valor);
+                    break;
+                case 4:
+                    oficina.setRegion(valor.isEmpty() ? oficina.getRegion() : valor);
+                    break;
+                case 5:
+                    oficina.setCodigoPostal(valor.isEmpty() ? oficina.getCodigoPostal() : valor);
+                    break;
+                case 6:
+                    oficina.setTelefono(valor.isEmpty() ? oficina.getTelefono() : valor);
+                    break;
+                case 7:
+                    oficina.setLineaDireccion1(valor.isEmpty() ? oficina.getLineaDireccion1() : valor);
+                    break;
+                case 8:
+                    oficina.setLineaDireccion2(valor.isEmpty() ? oficina.getLineaDireccion2() : valor);
+                default:
+                    break;
+            }
         }
         repo.actualizarOficina(oficina);
     }
