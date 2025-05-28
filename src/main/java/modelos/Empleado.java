@@ -21,4 +21,6 @@ public class Empleado {
             return "Empleado [codigoEmpleado=" + codigoEmpleado + ", nombre=" + nombre + ", apellido1=" + apellido1 +
                     ", apellido2=" + apellido2 + "]";
         }
+
+
 }
