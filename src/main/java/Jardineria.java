@@ -1,11 +1,13 @@
 import modelos.Oficina;
 import repositorios.OficinaRepo;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class Jardineria {
+
     public static void main(String[] args) throws SQLException {
 
         OficinaRepo repoOfi = new OficinaRepo();
@@ -64,8 +66,11 @@ public class Jardineria {
                     Oficina oficina = new Oficina();
                     try {
                         Optional<Oficina> oficinaExistenteOpt = repoOfi.leerOficinaxId(codigoModificar);
+
+                        leerYModificarCampos(scanner, oficinaExistenteOpt.get(), repoOfi);
+
                         // Utilizamos las posibilidades de la clase Optional para programación funcional
-                        oficinaExistenteOpt.ifPresentOrElse(
+                        /*oficinaExistenteOpt.ifPresentOrElse(
                                 ofi -> {
                                     try {
                                         System.out.println(repoOfi.actualizarOficina(preguntarCampos(ofi))  //utilizamos un if ternario
@@ -77,9 +82,11 @@ public class Jardineria {
                                     }
                                 },
                                 () -> System.out.println("No se encontró ninguna oficina con ese código.")
-                        );
+                        );*/
                     } catch (SQLException e) {
                         System.out.println("Error al modificar la oficina: " + e.getMessage());
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
                     }
                     break;
                 }
@@ -133,5 +140,53 @@ public class Jardineria {
         return oficinaExistente;
     }
 
-
+    private static void leerYModificarCampos(Scanner scanner, Oficina oficina, OficinaRepo repo) throws IllegalAccessException, SQLException {
+        // Obtenemos los campos de la oficina
+        Field[] listaCampos = oficina.getClass().getDeclaredFields();
+        // Generamos una lista con el nombre del campo y su valor mediante reflexión
+        for(int i = 0; i<listaCampos.length; i++) {
+            Field field = listaCampos[i];
+            field.setAccessible(true);
+            System.out.println("Campo " + (i+1) + ": " + field.getName() + " - valor: " + field.get(oficina));
+        }
+        // Preguntamos el campo que se desea modificar
+        System.out.println("Indique el numero del campo que desea modificar (si desea salir, indique cualquier otro número):");
+        int campo = scanner.nextInt();
+        // Si el campo es mayor que la última opción, salimos del método
+        if(campo > listaCampos.length) {
+           return;
+        }
+        // Preguntamos el nuevo valor
+        scanner.nextLine();
+        System.out.println("Que valor le desea dar al campo?");
+        String valor = scanner.nextLine();
+        switch(campo){
+            case 1:
+                System.out.println("El código de la oficina no se puede modificar");
+                break;
+            case 2:
+                oficina.setCiudad(valor.isEmpty() ? oficina.getCiudad() : valor);
+                break;
+            case 3:
+                oficina.setPais(valor.isEmpty() ? oficina.getPais() : valor);
+                break;
+            case 4:
+                oficina.setRegion(valor.isEmpty() ? oficina.getRegion() : valor);
+                break;
+            case 5:
+                oficina.setCodigoPostal(valor.isEmpty() ? oficina.getCodigoPostal() : valor);
+                break;
+            case 6:
+                oficina.setTelefono(valor.isEmpty() ? oficina.getTelefono() : valor);
+                break;
+            case 7:
+                oficina.setLineaDireccion1(valor.isEmpty() ? oficina.getLineaDireccion1() : valor);
+                break;
+            case 8:
+                oficina.setLineaDireccion2(valor.isEmpty() ? oficina.getLineaDireccion2() : valor);
+            default:
+                break;
+        }
+        repo.actualizarOficina(oficina);
+    }
 }
