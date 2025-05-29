@@ -19,9 +19,9 @@ public class MenuPpal {
                     2.Leer oficina por su ID
                     3.Nueva oficina
                     4.Modificar oficina
-                    5.delete
-                    6.exit
-                    Insert your option: \s""");
+                    5.Borrar oficina
+                    6.Salir
+                    Indique su opción: \s""");
             // esperamos la opción del cliente
             String opc = scanner.nextLine();
             switch (opc) {
