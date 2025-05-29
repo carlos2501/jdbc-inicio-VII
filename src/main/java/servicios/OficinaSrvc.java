@@ -20,7 +20,12 @@ public class OficinaSrvc implements IfOficinaSrvc{
 
     @Override
     public Optional<Oficina> leerOficinaxId(String id) throws SQLException {
-        return ofiRepo.leerOficinaxId(id);
+        Optional<Oficina> ofi = ofiRepo.leerOficinaxId(id);
+        Oficina oficina = ofi.get();
+        if(oficina.getRegion().equals("Centro")){
+            oficina.setRegion(oficina.getRegion()+"DC");
+        }
+        return Optional.of(oficina);
     }
 
     @Override
@@ -29,7 +34,12 @@ public class OficinaSrvc implements IfOficinaSrvc{
     }
 
     @Override
-    public boolean actualizarOficina(Oficina oficina) {
-        return false;
+    public boolean actualizarOficina(Oficina oficina) throws SQLException {
+        return ofiRepo.actualizarOficina(oficina);
+    }
+
+    @Override
+    public void borrarOficina(String id) throws SQLException {
+        ofiRepo.borrarOficina(id);
     }
 }

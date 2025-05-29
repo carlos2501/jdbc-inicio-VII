@@ -10,5 +10,6 @@ public interface IfOficinaSrvc {
     List<Oficina> listaOficinas() throws SQLException;
     Optional<Oficina> leerOficinaxId(String id) throws SQLException;
     void CrearOficina(Oficina oficina) throws SQLException;
-    boolean actualizarOficina(Oficina oficina);
+    boolean actualizarOficina(Oficina oficina) throws SQLException;
+    void borrarOficina(String id) throws SQLException;
 }

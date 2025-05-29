@@ -57,7 +57,7 @@ public class OficinaRepo {
             ResultSet rs = stmt.executeQuery();
             // si no hay oficina, se devolverá un optional.empty, y si la hay se devolverá su valor
             if (rs.next()) {
-                oficina = extractOficinaFrom(rs);
+                oficina = cargarOficinaFrom(rs);
             }
         }
         return Optional.ofNullable(oficina);
@@ -92,7 +92,16 @@ public class OficinaRepo {
         }
     }
 
-    private Oficina extractOficinaFrom(ResultSet rs) throws SQLException {
+    public void borrarOficina(String codigoOficina) throws SQLException {
+        String sql = "DELETE FROM oficina WHERE codigo_oficina = ?";
+
+        try(PreparedStatement stmt = obtenerConexion().prepareStatement(sql)) {
+            stmt.setString(1, codigoOficina);
+            stmt.executeUpdate();
+        }
+    }
+
+    private Oficina cargarOficinaFrom(ResultSet rs) throws SQLException {
         Oficina oficina = new Oficina();
         oficina.setCodigoOficina(rs.getString("codigo_oficina"));
         oficina.setCiudad(rs.getString("ciudad"));
@@ -104,5 +113,7 @@ public class OficinaRepo {
         oficina.setLineaDireccion2(rs.getString("linea_direccion2"));
         return oficina;
     }
+
+
 
 }

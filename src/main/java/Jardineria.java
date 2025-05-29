@@ -60,7 +60,7 @@ public class Jardineria {
                     break;
                 }
                 case "4": {
-                    System.out.println("Modificar oficina:");
+                    /*System.out.println("Modificar oficina:");
                     System.out.print("Introduce el código de la oficina que quieres modificar: ");
                     String codigoModificar = scanner.nextLine();
                     Oficina oficina = new Oficina();
@@ -82,12 +82,12 @@ public class Jardineria {
                                     }
                                 },
                                 () -> System.out.println("No se encontró ninguna oficina con ese código.")
-                        );*/
+                        );
                     } catch (SQLException e) {
                         System.out.println("Error al modificar la oficina: " + e.getMessage());
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
-                    }
+                    }*/
                     break;
                 }
                 /*case "5" -> .delete();*/
@@ -104,7 +104,7 @@ public class Jardineria {
 
     // Utilizamos el criterio de "responsabilidad única" del código y creamos este método que se ocupa de preguntar
     //  los campos al usuario devolver un objeto Oficina con los nuevos valores que se hayan modificado
-    private static Oficina preguntarCampos(Oficina oficinaExistente) {
+    /*private static Oficina preguntarCampos(Oficina oficinaExistente) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Datos actuales:");
         System.out.println(oficinaExistente);
@@ -137,9 +137,9 @@ public class Jardineria {
         String direccion2Nueva = scanner.nextLine();
         oficinaExistente.setLineaDireccion2(direccion2Nueva.isEmpty() ? oficinaExistente.getLineaDireccion2() : direccion2Nueva);
         return oficinaExistente;
-    }
+    }*/
 
-    private static void leerYModificarCampos(Scanner scanner, Oficina oficina, OficinaRepo repo) throws IllegalAccessException, SQLException {
+    /*private static void leerYModificarCampos(Scanner scanner, Oficina oficina, OficinaRepo repo) throws IllegalAccessException, SQLException {
         boolean seguir = true;
         boolean otravez = false;
         // Obtenemos los campos de la oficina
@@ -192,4 +192,5 @@ public class Jardineria {
         }
         repo.actualizarOficina(oficina);
     }
+    */
 }

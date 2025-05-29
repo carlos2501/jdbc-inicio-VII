@@ -62,34 +62,43 @@ public class OficinaCtrl {
         }
     }
 
-    public void modifiarOficina() {
-        System.out.println("Modificar oficina:");
-        System.out.print("Introduce el código de la oficina que quieres modificar: ");
-        String codigoModificar = scanner.nextLine();
-        Oficina oficina = new Oficina();
-        try {
-            Optional<Oficina> oficinaExistenteOpt = repoOfi.leerOficinaxId(codigoModificar);
+    public void modificarOficina() throws SQLException, IllegalAccessException {
+        Oficina oficina;
+        // preguntamos el código de la oficina
+        System.out.println("Ingrese el código de la oficina: ");
+        Optional<Oficina> ofi = oficinaSrvc.leerOficinaxId(scanner.nextLine());
+        if (ofi.isPresent()) {
+            // Si existe ofi (clase Optional) cargo su contenido en la variable oficina
+            oficina = ofi.get();
+            // Obtengo la lista de campos -propiedades- de <oficina> mediante reflexión <oficina.getClass().getDeclaredFields()>
+            Field[] listaCampos = oficina.getClass().getDeclaredFields();
+            // Recorremos la lista de los campos
+            for (int i = 0; i < listaCampos.length; i++) {
+                // para cada campo, presento su nombre y su valor.
+                Field field = listaCampos[i];
+                field.setAccessible(true);
+                System.out.println("Campo: " + field.getName() + " - valor: " + field.get(oficina) + " - nuevo valor: ");
+                // pregunto por el nuevo valor...
+                String valor = scanner.nextLine();
+                if(! valor.isEmpty()) {     // ... si el usuario introduce algo...
+                    field.set(oficina, valor);      // ... actualizo el valor del campo
+                }
+            }
+            // grabo los cambios
+            oficinaSrvc.actualizarOficina(oficina);
+            System.out.println("La oficina ha sido modificada correctamente");
+        }
+    }
 
-            leerYModificarCampos(scanner, oficinaExistenteOpt.get(), repoOfi);
+    public void borrarOficina() throws SQLException{
+        System.out.println("Ingrese el código de la oficina: ");
+        String codigoOficina = scanner.nextLine();
 
-            // Utilizamos las posibilidades de la clase Optional para programación funcional
-                        /*oficinaExistenteOpt.ifPresentOrElse(
-                                ofi -> {
-                                    try {
-                                        System.out.println(repoOfi.actualizarOficina(preguntarCampos(ofi))  //utilizamos un if ternario
-                                                ? "Oficina actualizada correctamente."
-                                                : "No se pudo actualizar la oficina :"
-                                        );
-                                    } catch (SQLException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                },
-                                () -> System.out.println("No se encontró ninguna oficina con ese código.")
-                        );*/
-        } catch (SQLException e) {
-            System.out.println("Error al modificar la oficina: " + e.getMessage());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+        if(codigoOficina != null) {
+            oficinaSrvc.borrarOficina(codigoOficina);
+            System.out.println("La oficina ha sido borrada correctamente");
+        }else{
+            System.out.println("No ha introducido ningún código de oficina");
         }
     }
 }

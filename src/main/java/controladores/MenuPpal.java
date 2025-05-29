@@ -38,10 +38,13 @@ public class MenuPpal {
                     break;
                 }
                 case "4": {
-                    oficinaCtrl.modifiarOficina();
+                    oficinaCtrl.modificarOficina();
                     break;
                 }
-                /*case "5" -> .delete();*/
+                case "5" : {
+                    oficinaCtrl.borrarOficina();
+                    break;
+                }
                 case "6": {
                     seguir = false;
                     break;
