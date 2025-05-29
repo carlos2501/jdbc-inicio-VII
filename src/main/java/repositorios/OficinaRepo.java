@@ -92,7 +92,7 @@ public class OficinaRepo {
         }
     }
 
-    public Oficina extractOficinaFrom(ResultSet rs) throws SQLException {
+    private Oficina extractOficinaFrom(ResultSet rs) throws SQLException {
         Oficina oficina = new Oficina();
         oficina.setCodigoOficina(rs.getString("codigo_oficina"));
         oficina.setCiudad(rs.getString("ciudad"));

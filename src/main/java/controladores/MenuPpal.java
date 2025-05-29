@@ -1,14 +1,11 @@
 package controladores;
 
-import modelos.Oficina;
-
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class MenuPpal {
 
-    public void presentarMenuPpal() {
+    public void presentarMenuPpal() throws SQLException, IllegalAccessException {
         Scanner scanner = new Scanner(System.in);
         boolean seguir = true;
         OficinaCtrl oficinaCtrl = new OficinaCtrl();

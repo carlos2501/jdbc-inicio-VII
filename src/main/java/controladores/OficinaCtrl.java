@@ -1,41 +1,60 @@
 package controladores;
 
 import modelos.Oficina;
+import servicios.IfOficinaSrvc;
 import servicios.OficinaSrvc;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class OficinaCtrl {
 
-    OficinaSrvc oficinaSrvc = new OficinaSrvc();
+    IfOficinaSrvc oficinaSrvc = new OficinaSrvc();
+    Scanner scanner = new Scanner(System.in);
 
-    public void listarOficinas() {
+    public void listarOficinas() throws SQLException {
         oficinaSrvc.listaOficinas().forEach(System.out::println);
     }
 
-    public void leerOficinaxId(){
+    public void leerOficinaxId() throws SQLException {
         System.out.println("Indique el id de la oficina: ");
         // preguntamos el id de la oficina y vamos a buscar sus datos
-        Optional<Oficina> ofi = repoOfi.leerOficinaxId(scanner.nextLine());
-        ofi.ifPresent(System.out::println);
-        if (ofi.isEmpty()) {
-            System.out.println("El id de la oficina no existe");
-        }
-
+        Optional<Oficina> ofi = oficinaSrvc.leerOficinaxId(scanner.nextLine());
+        // Aprovecho las capacidades de Optional para simplificar el código y utilizar conceptos de programación funcional
+        ofi.ifPresentOrElse(
+                System.out::println,
+                () -> System.out.println("El id de la oficina no existe")
+        );
     }
 
-    public void crearOficina(){
+    public void crearOficina() throws IllegalAccessException, SQLException {
         Oficina ofi = new Oficina();
         System.out.println("Introduzca los datos de la oficina: ");
-        System.out.println("Código de oficina: ");
-        ofi.setCodigoOficina(scanner.nextLine());
-        System.out.println("Ciudad:");
-        ofi.setCiudad(scanner.nextLine());
-        repoOfi.CrearOficina(ofi);
+        // Obtenemos la lista de los campos mediante reflexión
+        Field[] listaCampos = ofi.getClass().getDeclaredFields();
+        // Generamos una lista con el nombre del campo y pregunto su valor al usuario
+        for(int i = 0; i < listaCampos.length; i++) {  // en producción, utilizar el for "mejorado" que propone el IDE
+            // obtengo el campo
+            Field field = listaCampos[i];
+            // hago que sus propiedades "private" sean accesibles (las otras ya lo son)
+            field.setAccessible(true);
+            // pregunto al usuario
+            System.out.println("Campo: " + field.getName() + " - valor: ");
+            String valor = scanner.nextLine();
+            field.set(ofi,valor);
+        }
+        // Envio al servicio la petición de crear la oficina
+        oficinaSrvc.CrearOficina(ofi);
+
         // Comprobamos sio se ha creado la oficina
-        Optional<Oficina> ofiGrabada = repoOfi.leerOficinaxId(ofi.getCodigoOficina());
+        Optional<Oficina> ofiGrabada = oficinaSrvc.leerOficinaxId(ofi.getCodigoOficina());
+
+        /** La siguiente comprobación es funcionalmente idéntica a la realizada en las últimas líneas del método
+         * leerOficinaxId(). Aquella tiene un enfoque de programación funcional (gracias a Optional) y esta un enfoque
+         * de programación "procedimental" tradicional
+         */
         if (ofiGrabada.isPresent()) {
             System.out.println("la oficina se ha grabado correctamente.");
         } else {
